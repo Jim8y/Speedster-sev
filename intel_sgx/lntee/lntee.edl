@@ -1,0 +1,43 @@
+// Copyright (c) Microsoft Corporation. All rights reserved.
+// Licensed under the MIT License.
+
+enclave {
+        from "openenclave/edl/syscall.edl" import *;
+        from "openenclave/edl/sgx/platform.edl" import *;
+    trusted {
+        public void ecall_lntee_main([in, string] const char* contract_definition,[out,size=addr_size]char * address,size_t addr_size);
+
+        public int ecall_lntee_init_tee([in,string]const char * seed, [user_check] const char* pubkey, [user_check]const char* addr);
+
+
+        // process transaction
+        public void ecall_lntee_send([user_check]const char * function_call, [user_check] char *tx_str);
+
+        public int ecall_lntee_recv_transaction([in,string]const char * transaction);
+
+        // Process direct transaction pubkey: target pubkey, amt: amount to send
+        public void ecall_lntee_direct_send([in, string]const char *pubkey, int amt, [user_check] char * tx);
+        public int ecall_lntee_direct_recv([in, string]const char *tx);
+
+        public int ecall_lntee_generate_contract_instance_id();
+
+        public void ecall_dummy();
+
+        // Encrypt the ecdh secret key with the peer ecdh_pubkey
+        //public void ecall_lntee_ecdh_start([user_check] const char *ecdh_pubkey,[user_check] char * ecdh_secret);
+        
+        // Receive ECDH secret and generate self ECDH secret
+        //public void ecall_lntee_ecdh_update([in,string]const char *bin_pubkey,[user_check] char* bin_msg,[user_check] char *bin_ecdh_secret);
+        
+        // Final step of ECDH secret exchange
+        //public void ecall_lntee_ecdh_final([in,string] const char *ecdh_pubkey,[in,string] char * ecdh_secret);
+
+    };
+
+    untrusted {
+        void ocall_lntee_broadcast([in,string] const char*tx,[in,string] const char* instance_id);
+        void ocall_lntee_send_transaction([in,string] const char* target_pubkey,[in,string]const char * tx);
+        void ocall_lntee_time_log();
+        void ocall_lntee_pubkey([in,string] const char * pubkey,size_t len);
+    };
+};

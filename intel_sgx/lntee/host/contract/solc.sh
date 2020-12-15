@@ -1,0 +1,1 @@
+solc --evm-version homestead --combined-json bin,hashes --pretty-json --optimize $1.sol > $1_combined.json
