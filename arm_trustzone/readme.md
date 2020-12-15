@@ -1,6 +1,6 @@
 # Speedster for ARM TrustZone
 
-projects in ./sdk/tests/lntee
+project in ./lntee
 
 runs upon our version of optee os
 
